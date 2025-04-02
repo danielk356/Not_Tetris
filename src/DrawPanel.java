@@ -7,9 +7,12 @@ import java.util.ArrayList;
 public class DrawPanel extends JPanel implements MouseListener {
 
     private boolean[][] grid;
+    private BrickLayout brickLayout;
 
     public DrawPanel() {
+        this.addMouseListener(this);
         grid = new boolean[30][40];
+        brickLayout = new BrickLayout("src/BrickInput", 40, false);
     }
 
     protected void paintComponent(Graphics g) {
@@ -17,12 +20,12 @@ public class DrawPanel extends JPanel implements MouseListener {
         int x = 10;
         int y = 10;
         Graphics2D g2 = (Graphics2D) g;
-        
+
         for (int i = 0; i < 30; i++) {
             for (int a = 0; a < 40; a++) {
                 g.drawRect(x, y, 20, 20);
                 if (grid[i][a]) {
-                    g2.setColor(Color.RED);
+                    g2.setColor(Color.GREEN);
                     g.fillRect(x, y, 20, 20);
                     g2.setColor(Color.BLACK);
                 }
@@ -34,16 +37,16 @@ public class DrawPanel extends JPanel implements MouseListener {
     }
 
     private void turnRed() {
+        brickLayout.doOneBrick();
+        int[][] brickLayoutGrid = brickLayout.getBrickLayout();
         for (int r = 0; r < grid.length; r++) {
             for (int c = 0; c < grid[0].length; c++) {
-                int chance = (int) (Math.random() * 10);
-                if (chance < 3) {
+                if (brickLayoutGrid[r][c] == 1) {
                     grid[r][c] = true;
                 }
             }
         }
     }
-
 
     @Override
     public void mouseClicked(MouseEvent e) {
