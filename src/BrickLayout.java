@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class BrickLayout {
@@ -34,13 +36,29 @@ public class BrickLayout {
 
     public void doOneBrick() {
         if (bricks.size() != 0) {
-            int height = brickLayout.length - 1;
+            int height = 0;
             Brick b = bricks.remove(0);
-            for (int i = b.getStart(); i <= b.getEnd(); i++) {
-                if (checkBrickSpot(height, i)) {
-                    height--;
+            boolean correctPlace = false;
+            boolean space = true;
+
+            while (!correctPlace) {
+                for (int i = b.getStart(); i <= b.getEnd(); i++) {
+                    if (height == brickLayout.length - 1) {
+                        space = false;
+                    }
+                    else if (checkBrickSpot(height++, i)) {
+                        space = false;
+                    }
                 }
+                if (space) {
+                    height++;
+                }
+                if (!space) {
+                    correctPlace = true;
+                }
+
             }
+
             for (int i = b.getStart(); i <= b.getEnd(); i++) {
                 brickLayout[height][i] = 1;
             }
